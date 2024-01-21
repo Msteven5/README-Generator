@@ -71,7 +71,7 @@ const getFileName = async () => {
     await askQs(questions[0])
         .then(response => {
             fileName = response;
-            appendToFile(fileName.Title, "README.md", `#${fileName.Title}\n\n`)
+            appendToFile(fileName.Title, "README.md", `# ${fileName.Title}\n\n`)
         }
         )
 }
@@ -81,8 +81,8 @@ const createDoc = async () => {
     for (let i = 1; i < questions.length; i++) {
         await askQs(questions[i])
         .then((response) => {
-            appendToFile(fileName.Title, "README.md", "##" + questions[i].name + "\n\n")
-            appendToFile(fileName.Title, "README.md", "###" + response[questions[i].name] + "\n\n");
+            appendToFile(fileName.Title, "README.md", "## " + questions[i].name + "\n\n")
+            appendToFile(fileName.Title, "README.md", response[questions[i].name] + "\n\n");
         })
     }
 }
