@@ -1,11 +1,17 @@
-# README-Generator
+# README Generator
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Tests](#tests)
-- [Questions](#questions)
+## License
+
+[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
+
+## Table Of Contents
+
+- [Description](#Description)
+- [Installation](#Installation)
+- [Usage](#Usage)
+- [Contributing](#Contributing)
+- [Tests](#Tests)
+- [Questions](#Questions)
 
 ## Description
 
@@ -23,10 +29,6 @@ This application can be used to expedite the process of generating README files 
 
 I, Michael Davidson am the only one that contributed to this code besides the starter code that was provided by UTA via the bootcamp I am attending during the time of this application's creation.
 
-## license
-
-No License
-
 ## Tests
 
 Run the application in the terminal to answer questions and have a README generated for you to use simply by adding into GitHub.
@@ -35,3 +37,4 @@ Run the application in the terminal to answer questions and have a README genera
 
 Msdavid55@gmail.com feel free to send an email over to ask any questions or voice any concerns that may arise during the use of this application.
 
+https://github.com/Msteven5
