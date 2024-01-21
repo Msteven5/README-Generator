@@ -2,7 +2,6 @@
 const fs = require('fs')
 const inquirer = require("inquirer");
 
-let fileName;
 // TODO: Create an array of questions for user input
 const questions = [{
     message: 'What is the title of your project?',
@@ -25,14 +24,10 @@ const questions = [{
     name: 'Contributing'
 },
 {
-    input: 'list',
+    type: 'list',
     message: 'What license was used in the making of this application?',
     name: 'License',
-    choices: [
-        'MIT',
-        'Unlicense',
-        'Artistic-2.0'
-    ]
+    choices: ['MIT', 'Unlicense', 'Artistic-2.0']
 },
 {
     message: 'Give an example of a way to test out this application:',
@@ -67,11 +62,10 @@ const generateHeaders = (content) => {
 }
 
 //This creates the filename and makes it a global variable to be used later.
-const getFileName = async () => {
+const writeFile = async () => {
     await askQs(questions[0])
         .then(response => {
-            fileName = response;
-            appendToFile(fileName.Title, "README.md", `# ${fileName.Title}\n\n`)
+            appendToFile("README", "md", "# " + response.Title + "\n\n" + "## Table Of Contents\n\n")
         }
         )
 }
@@ -80,34 +74,22 @@ const getFileName = async () => {
 const createDoc = async () => {
     for (let i = 1; i < questions.length; i++) {
         await askQs(questions[i])
-        .then(async (response) => {
-            await appendToFile(fileName.Title, "README.md", "## " + questions[i].name + "\n\n" + response[questions[i].name] + "\n\n");
-        })
+            .then(async (response) => {
+                await appendToFile("README", "md", "## " + questions[i].name + "\n\n" + response[questions[i].name] + "\n\n");
+            })
     }
 }
 
+const tableOfContents = async () => {
+    for (let i = 1; i < questions.length; i++) {
+       await appendToFile("README", "md", "- [" + questions[i].name + "](#" + questions[i].name + ")\n\n")
+    }
+}
 
 async function init() {
-    await getFileName();
+    await writeFile();
+    tableOfContents();
     createDoc();
 }
 
 init();
-
-// askQs(questions)
-//     .then((responses) => {
-//         appendToFile(responses.title, "md", "README\n")
-//         appendToFile(responses.title, "md", generateHeaders(responses.title) + "\n")
-
-//             appendToFile(responses.title, "md", generateHeaders(questions[i].name) + "\n")
-//         }
-//     })
-//     .catch(console.error)
-// // TODO: Create a function to write README file
-// function writeToFile(fileName, data) { }
-
-// // TODO: Create a function to initialize app
-// function init() { }
-
-// // Function call to initialize app
-// init();
