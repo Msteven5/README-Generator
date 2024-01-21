@@ -24,12 +24,6 @@ const questions = [{
     name: 'Contributing'
 },
 {
-    type: 'list',
-    message: 'What license was used in the making of this application?',
-    name: 'License',
-    choices: ['MIT', 'Unlicense', 'Artistic-2.0']
-},
-{
     message: 'Give an example of a way to test out this application:',
     name: 'Tests'
 },
@@ -57,10 +51,6 @@ const appendToFile = (filename, filetype, dataOnScreen) => {
     )
 }
 
-const generateHeaders = (content) => {
-    return `##${content}`
-}
-
 //This creates the filename and makes it a global variable to be used later.
 const writeFile = async () => {
     await askQs(questions[0])
@@ -75,16 +65,27 @@ const createDoc = async () => {
     for (let i = 1; i < questions.length; i++) {
         await askQs(questions[i])
             .then(async (response) => {
-                await appendToFile("README", "md", "## " + questions[i].name + "\n\n" + response[questions[i].name] + "\n\n");
+                await appendToFile("README", "md", "\n## " + questions[i].name + "\n\n" + response[questions[i].name] + "\n");
             })
     }
 }
 
 const tableOfContents = async () => {
     for (let i = 1; i < questions.length; i++) {
-       await appendToFile("README", "md", "- [" + questions[i].name + "](#" + questions[i].name + ")\n\n")
+       await appendToFile("README", "md", "- [" + questions[i].name + "](#" + questions[i].name + ")\n")
     }
 }
+
+const getLicense = () => {
+    switch(license) {
+
+    }
+}
+
+
+
+
+
 
 async function init() {
     await writeFile();
