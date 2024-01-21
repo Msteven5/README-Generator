@@ -39,46 +39,34 @@ const askQs = (questions) => {
 }
 
 //This writes the data to the file I create.
-const appendToFile = (filename, filetype, dataOnScreen) => {
+const appendToFile = (dataOnScreen) => {
     fs.appendFile(
-        `${filename}.${filetype}`,
+        "README.md",
         dataOnScreen,
         (err) => {
-            if (err) {
-                console.log(err)
-            }
+            (err) ? console.log(err) : console.log("Success!")
+            })
         }
-    )
-}
 
 //This creates the filename and makes it a global variable to be used later.
-const writeFile = async () => {
-    await askQs(questions[0])
-        .then(response => {
-            appendToFile("README", "md", "# " + response.Title + "\n\n")
-        }
-        )
-}
-
-
 const createDoc = async () => {
     for (let i = 1; i < questions.length; i++) {
         await askQs(questions[i])
-            .then(async (response) => {
-                await appendToFile("README", "md", "\n## " + questions[i].name + "\n\n" + response[questions[i].name] + "\n");
+        .then(async (response) => {
+                await appendToFile("\n## " + questions[i].name + "\n\n" + response[questions[i].name] + "\n");
             })
-    }
+        }
 }
 
 const tableOfContents = async () => {
     for (let i = 1; i < questions.length; i++) {
-        await appendToFile("README", "md", "- [" + questions[i].name + "](#" + questions[i].name + ")\n")
+        await appendToFile("- [" + questions[i].name + "](#" + questions[i].name + ")\n")
     }
 }
 
 const getLicense = async () => {
-    appendToFile("README", "md", "## License\n\n")
-
+   await appendToFile("## License\n\n")
+    
     await askQs({
         type: 'list',
         message: 'What license was used in the making of this application?',
@@ -86,23 +74,29 @@ const getLicense = async () => {
         choices: ['MIT', 'Unlicense', 'Artistic-2.0']
     },)
     .then(response => {
-    switch (response.License) {
-        case 'MIT': appendToFile("README", "md",'[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n\n' + "## Table Of Contents\n\n")
+        switch (response.License) {
+            case 'MIT': appendToFile('[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n\n' + "## Table Of Contents\n\n")
             break;
-        case 'Unlicense': appendToFile("README", "md",'[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)\n\n'+ "## Table Of Contents\n\n")
+            case 'Unlicense': appendToFile('[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)\n\n'+ "## Table Of Contents\n\n")
             break;
-        case 'Artistic-2.0': appendToFile("README", "md",'[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)\n\n'+ "## Table Of Contents\n\n")
+            case 'Artistic-2.0': appendToFile('[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)\n\n'+ "## Table Of Contents\n\n")
             break;
-        default: ''
-    }
+            default: ''
+        }
     })
+}
+
+const writeFile = async () => {
+    await askQs(questions[0])
+        .then(response => {
+            appendToFile( "# " + response.Title + "\n\n")
+            getLicense();
+        })
 }
 
 async function init() {
     await writeFile();
-    await getLicense();
-    await tableOfContents();
-    await createDoc();
+
 }
 
 init();
