@@ -55,7 +55,7 @@ const appendToFile = (filename, filetype, dataOnScreen) => {
 const writeFile = async () => {
     await askQs(questions[0])
         .then(response => {
-            appendToFile("README", "md", "# " + response.Title + "\n\n" + "## Table Of Contents\n\n")
+            appendToFile("README", "md", "# " + response.Title + "\n\n")
         }
         )
 }
@@ -72,25 +72,37 @@ const createDoc = async () => {
 
 const tableOfContents = async () => {
     for (let i = 1; i < questions.length; i++) {
-       await appendToFile("README", "md", "- [" + questions[i].name + "](#" + questions[i].name + ")\n")
+        await appendToFile("README", "md", "- [" + questions[i].name + "](#" + questions[i].name + ")\n")
     }
 }
 
-const getLicense = () => {
-    switch(license) {
+const getLicense = async () => {
+    appendToFile("README", "md", "## License\n\n")
 
+    await askQs({
+        type: 'list',
+        message: 'What license was used in the making of this application?',
+        name: 'License',
+        choices: ['MIT', 'Unlicense', 'Artistic-2.0']
+    },)
+    .then(response => {
+    switch (response.License) {
+        case 'MIT': appendToFile("README", "md",'[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n\n' + "## Table Of Contents\n\n")
+            break;
+        case 'Unlicense': appendToFile("README", "md",'[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)\n\n'+ "## Table Of Contents\n\n")
+            break;
+        case 'Artistic-2.0': appendToFile("README", "md",'[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)\n\n'+ "## Table Of Contents\n\n")
+            break;
+        default: ''
     }
+    })
 }
-
-
-
-
-
 
 async function init() {
     await writeFile();
-    tableOfContents();
-    createDoc();
+    await getLicense();
+    await tableOfContents();
+    await createDoc();
 }
 
 init();
