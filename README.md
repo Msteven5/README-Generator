@@ -1,5 +1,12 @@
 # README-Generator
 
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Tests](#tests)
+- [Questions](#questions)
+
 ## Description
 
 This application generates professional grade README files to be added to other applications to make it easier to describe its usage.
@@ -16,7 +23,7 @@ This application can be used to expedite the process of generating README files 
 
 I, Michael Davidson am the only one that contributed to this code besides the starter code that was provided by UTA via the bootcamp I am attending during the time of this application's creation.
 
-## License
+## license
 
 No License
 
