@@ -2,7 +2,9 @@
 const fs = require('fs').promises;
 const inquirer = require("inquirer");
 
-// TODO: Create an array of questions for user input
+let licenseName;
+
+//This is my questions array that will be sorted through later and the response info distributed.
 const questions = [{
     message: 'What is the title of your project?',
     name: 'Title'
@@ -61,49 +63,68 @@ const createDoc = async () => {
         message: 'What is your GitHub username for the link address?',
         name: 'Github',
     })
-        .then(response => {
-            appendToFile("\nhttps://github.com/" + response.Github)
+        .then(async (response) => {
+            await appendToFile("\nhttps://github.com/" + response.Github + "\n\n## License\n\n" + licenseName.notice)
         })
 }
 
-const tableOfContents = async () => {
-    appendToFile("## Table Of Contents\n\n")
-    for (let i = 1; i < questions.length; i++) {
-        await appendToFile("- [" + questions[i].name + "](#" + questions[i].name + ")\n")
-    }
+//This function populates the table of contents. For loop did not work and could not uncover why.
+const tableOfContents = () => {
+    appendToFile(
+        "- [" + questions[1].name + "](#" + questions[1].name + ")\n" +
+        "- [" + questions[2].name + "](#" + questions[2].name + ")\n" +
+        "- [" + questions[3].name + "](#" + questions[3].name + ")\n" +
+        "- [" + questions[4].name + "](#" + questions[4].name + ")\n" +
+        "- [" + questions[5].name + "](#" + questions[5].name + ")\n" +
+        "- [" + questions[6].name + "](#" + questions[6].name + ")\n" +
+        "- [License](#License)\n"
+    )
 }
 
+//This function gathers the license information from the user and distributes it to fill in the licenseName variable.
 const getLicense = async () => {
-    await appendToFile("## License\n\n")
 
     await askQs({
         type: 'list',
         message: 'What license was used in the making of this application?',
         name: 'License',
         choices: ['MIT', 'Unlicense', 'Artistic-2.0', 'None']
-    },)
+    })
         .then(response => {
             switch (response.License) {
-                case 'MIT': appendToFile('[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n\n')
+                case 'MIT': licenseName = {
+                    badge: '[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)',
+                    notice: 'This application uses the ' + response.License + ' license that you can learn all about by clicking the badge listed at the top of the README, next to the title.'
+                }
                     break;
-                case 'Unlicense': appendToFile('[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)\n\n')
+                case 'Unlicense': licenseName = {
+                    badge: '[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)',
+                    notice: 'This application uses the ' + response.License + ' license that you can learn all about by clicking the badge listed at the top of the README, next to the title.'
+                }
                     break;
-                case 'Artistic-2.0': appendToFile('[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)\n\n')
+                case 'Artistic-2.0': licenseName = {
+                    badge: '[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)',
+                    notice: 'This application uses the ' + response.License + ' license that you can learn all about by clicking the badge listed at the top of the README, next to the title.'
+                }
                     break;
-                default: ''
+                default: licenseName = {
+                    badge: 'None',
+                    notice: 'None'
+                }
             }
         })
 }
 
+//This initializes the whole process by filling in the title and license badge at the top of the screen before the rest of the process occurs.
 const writeFile = async () => {
     await askQs(questions[0])
         .then(async (response) => {
-            await appendToFile("# " + response.Title + "\n\n")
-            await getLicense();
+            await appendToFile("# " + response.Title + "            " + licenseName.badge + "\n\n## Table Of Contents\n\n")
         })
 }
 
 async function init() {
+    await getLicense();
     await writeFile();
     await tableOfContents();
     await createDoc();
